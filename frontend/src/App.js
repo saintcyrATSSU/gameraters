@@ -9,6 +9,8 @@ import LandingPage from "./components/pages/landingPage";
 import HomePage from "./components/pages/homePage";
 import Login from "./components/pages/loginPage";
 import Signup from "./components/pages/registerPage";
+import ShowGameDetails from "./components/pages/showGameDetails";
+import NotificationsPage from "./components/pages/notificationsPage"
 import PrivateUserProfile from "./components/pages/privateUserProfilePage";
 import { createContext, useState, useEffect } from "react";
 import getUserInfo from "./utilities/decodeJwt";
@@ -33,6 +35,8 @@ const App = () => {
           <Route exact path="/login" element={<Login />} />
           <Route exact path="/signup" element={<Signup />} />
           <Route path="/privateUserProfile" element={<PrivateUserProfile />} />
+          <Route path="/showGameDetails" element={<ShowGameDetails />} />
+          <Route path="/notificationsPage" element={<NotificationsPage />} />
         </Routes>
       </UserContext.Provider>
     </>

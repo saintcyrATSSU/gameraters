@@ -6,7 +6,7 @@ import Form from "react-bootstrap/Form";
 
 const PRIMARY_COLOR = "#cc5c99";
 const SECONDARY_COLOR = "#0c0c1f";
-const const url = `${process.env.REACT_APP_BACKEND_SERVER_URI}/user/signup`;
+const url = `${process.env.REACT_APP_BACKEND_SERVER_URI}/user/signup`;
 const Register = () => {
   const [data, setData] = useState({ username: "", email: "", password: "" });
   const [error, setError] = useState("");
@@ -44,7 +44,7 @@ const Register = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const { response: res } = await axios.post(url, data);
+      const { data: res } = await axios.post(url, data);
       const {accessToken} = res;
 
       navigate("/login");
@@ -77,9 +77,6 @@ const Register = () => {
                     onChange={handleChange}
                     placeholder="Enter username"
                   />
-                  <Form.Text className="text-muted">
-                    We just might sell your data
-                  </Form.Text>
                 </Form.Group>
                 <Form.Group className="mb-3" controlId="formBasicEmail">
                   <Form.Label style={labelStyling}>Email</Form.Label>
@@ -89,9 +86,6 @@ const Register = () => {
                     onChange={handleChange}
                     placeholder="Enter Email Please"
                   />
-                  <Form.Text className="text-muted">
-                    We just might sell your data
-                  </Form.Text>
                 </Form.Group>
                 <Form.Group className="mb-3" controlId="formBasicPassword">
                   <Form.Label style={labelStyling}>Password</Form.Label>

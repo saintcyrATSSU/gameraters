@@ -8,39 +8,27 @@ const { generateAccessToken } = require('../utilities/generateToken');
 
 router.post('/editUser', async (req, res) =>
 {
-    // validate new user information
-    const { error } = newUserValidation(req.body);
-    if (error) return res.status(400).send({ message: error.errors[0].message });
+    const { bio } = req.body;
+    const { username } = req.params;
+    try {
+        const profileId = req.params.id;
 
-    // store new user information
-    const {userId, username, email, password} = req.body
+        // Find the profile by ID
+        const profile = await profileModel.findOne(username);
 
-    // check if username is available
-    const user = await newUserModel.findOne({ username: username })
-    if (user) userIdReg = JSON.stringify(user._id).replace(/["]+/g, '')
-    if (user && userIdReg !== userId) return res.status(409).send({ message: "Username is taken, pick another" })
+        if (!profile) {
+            return res.status(404).json({ error: "Profile not found" });
+        }
+     
+     profile.bio = bio;
+     await profile.save();
 
-    // generates the hash
-    const generateHash = await bcrypt.genSalt(Number(10))
-
-    // parse the generated hash into the password
-    const hashPassword = await bcrypt.hash(password, generateHash)
-
-    // find and update user using stored information
-    newUserModel.findByIdAndUpdate(userId, {
-        username : username, 
-        email : email, 
-        password : hashPassword
-    } ,function (err, user) {
-    if (err){
-        console.log(err);
-    } else {
-        // create and send new access token to local storage
-        const accessToken = generateAccessToken(user._id, email, username, hashPassword)  
-        res.header('Authorization', accessToken).send({ accessToken: accessToken })
-    }
-    });
-
+     res.json({ message: "Profile updated successfully", profile });
+ } catch (error) {
+     console.error(error);
+     res.status(500).json({ error: "Internal server error" });
+ }
 })
+
 
 module.exports = router;

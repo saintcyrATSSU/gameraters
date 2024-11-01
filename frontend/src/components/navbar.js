@@ -25,7 +25,9 @@ export default function Navbar() {
       <Nav className="me-auto">
         <Nav.Link href="/">Start</Nav.Link>
         <Nav.Link href="/home">Home</Nav.Link>
+        <Nav.Link href="/showGameDetails">Search</Nav.Link>
         <Nav.Link href="/privateUserProfile">Profile</Nav.Link>
+        <Nav.Link href="/notifications">Notifications</Nav.Link>
       </Nav>
     </Container>
   </ReactNavbar>

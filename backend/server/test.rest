@@ -29,7 +29,8 @@ Content-Type: application/json
 {
     "userId" : "635ab8dfc407faf9f73deaf2",
     "username" : "Tochi Edit",
-    "password" : "dwwrwr"
+    "password" : "dwwrwr",
+    "bio"  : "I am a gamer here"
 }
 
 ###
@@ -50,3 +51,9 @@ Content-Type: application/json
 
 ###
 POST  http://localhost:8081/user/deleteAll
+
+###
+GET http://localhost:8081/games/game/666220
+
+###
+GET http://localhost:8081/games/game/name
