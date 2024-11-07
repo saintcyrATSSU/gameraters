@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import getUserInfo from '../../utilities/decodeJwt';
 import axios from 'axios';
-import './homePage.css';
 import ProfileImage from "../images/ProfileImage.js";
 
 const HomePage = () => {
@@ -60,15 +59,12 @@ const HomePage = () => {
                     <h3>Welcome to GameRaters!</h3>
                     <p className="username">{username}</p>
                 </div>
-                <div className="card>">
+                <div className="card">
                     <p>You can find a game you like and you can rate them here 
                         at GameRaters
                     </p>
                 </div>
             </div>
-            <button onClick={(e) => handleClick(e)}>
-                Log Out
-            </button>
         </>
     
     );

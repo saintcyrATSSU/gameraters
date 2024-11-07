@@ -12,6 +12,7 @@ const gameDetails = require('./routes/gamesdetails')
 const commentRoutes = require('./routes/commentRoutes')
 const NotificationRoutes = require('./routes/NotificationRoutes');
 const getProfileImage = require('./routes/user.getProfileImage');
+const reviewRoutes = require('./routes/reviewRoutes');
  
 
 require('dotenv').config();
@@ -30,6 +31,7 @@ app.use('/games', gameDetails)
 app.use('/comments', commentRoutes)
 //app.use('/routes/', NotificationRoutes)
 app.use('/user', getProfileImage)
+app.use('/api/reviews', reviewRoutes);
 
 app.listen(SERVER_PORT, (req, res) => {
     console.log(`The backend service is running on port ${SERVER_PORT} and waiting for requests.`);

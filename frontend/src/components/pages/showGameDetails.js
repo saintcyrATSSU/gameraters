@@ -5,6 +5,7 @@ function ShowGameDetails() {
   const [gameDetails, setGameDetails] = useState(null);
   const [error, setError] = useState('');
   const [games, setGames] = useState('');
+  const [name, setName] = useState('');
 
   const fetchGameDetails = async (e) => {
     e.preventDefault();
@@ -33,7 +34,7 @@ function ShowGameDetails() {
           onChange={(e) => setGames(e.target.value)}
           placeholder="Enter Game"
         />
-        <button type="submit">Get Game Details</button>
+        <button type="submit">Search</button>
       </form>
 
       {error && <p style={{ color: 'red' }}>{error}</p>}
@@ -41,9 +42,12 @@ function ShowGameDetails() {
       {gameDetails && (
         <div>
           <h2>Game Details</h2>
+          <div className="card">
           <p><strong>Name:</strong> {gameDetails.name}</p>
           <p><strong>Description:</strong> {gameDetails.desc}</p>
           <p><strong>Release Date:</strong> {gameDetails.release_date}</p>
+          <p><strong>Publisher:</strong> {gameDetails.publisher}</p>
+          </div>
         </div>
       )}
     </div>

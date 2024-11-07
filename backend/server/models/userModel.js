@@ -22,6 +22,16 @@ const newUserSchema = new mongoose.Schema(
       type: Date,
       default: Date.now,
     },
+    biography: {
+      required: false,
+      type: String,
+      default: ''
+    }
+    profileImage: {
+      type: String,
+      label: "profileImage",
+      required: false,
+    },
   },
   { collection: "users" }
 );

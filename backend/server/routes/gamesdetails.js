@@ -5,8 +5,9 @@ const axios = require("axios");
 
 const GAME_API_BASE_URL = 'https://games-details.p.rapidapi.com';
 router.get('/game/name', async (req, res) => {
+    const gameName = req.params;
     const apiKey = process.env.GAME_API_KEY;
-    const apiUrl = `https://games-details.p.rapidapi.com/games/1`;
+    const apiUrl = `https://games-details.p.rapidapi.com/games/${gameName}`;
 
     try {
         const response = await axios.get(apiUrl, {

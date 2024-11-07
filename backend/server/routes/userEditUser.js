@@ -14,14 +14,14 @@ router.post('/editUser', async (req, res) =>
         const profileId = req.params.id;
 
         // Find the profile by ID
-        const profile = await profileModel.findOne(username);
+        const user = await userModel.findOne(username);
 
-        if (!profile) {
-            return res.status(404).json({ error: "Profile not found" });
+        if (!user) {
+            return res.status(404).json({ error: "User not found" });
         }
      
-     profile.bio = bio;
-     await profile.save();
+     user.bio = bio;
+     await user.save();
 
      res.json({ message: "Profile updated successfully", profile });
  } catch (error) {

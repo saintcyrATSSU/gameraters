@@ -3,6 +3,7 @@ import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 import { useNavigate } from "react-router-dom";
 import getUserInfo from "../../utilities/decodeJwt";
+import ProfileImage from "../images/ProfileImage.js";
 
 
 //link to service
@@ -70,75 +71,63 @@ const PrivateUserProfile = () => {
   // 	<span><b>{<FollowerCount username = {username}/>}</b></span>&nbsp;
   // <span><b>{<FollowingCount username = {username}/>}</b></span>;
   if (!user) return (<div><h4>Log in to view this page.</h4></div>)
-  return (
-    <div class="container">
-      <div class="col-md-12 text-center">
-        <h1>{user && user.username}</h1>
-        <div class="col-md-12 text-center">
-          <>
-          <Button className="me-2" onClick={handleShow}>
-              Edit Profile
-            </Button>
-            <Button className="me-2" onClick={handleShow}>
-              Log Out
-            </Button>
-            <Modal
-              show={show}
-              onHide={handleClose}
-              backdrop="static"
-              keyboard={false}
-            >
-            <Modal.Header closeButton>
-                <Modal.Title>Edit Profile</Modal.Title>
-              </Modal.Header>
-              <Modal.Body>
-                <div className="mb-3">
-                  <label htmlFor="username" className="form-label">Username</label>
-                  <input
-                    type="text"
-                    className="form-control"
-                    id="username"
-                    value={username} readOnly
-                    onChange={(e) => setUsername(e.target.value)}
-                  />
-                </div>
-                <div className="mb-3">
-                  <label htmlFor="bio" className="form-label">Bio</label>
-                  <textarea
-                    className="form-control"
-                    id="bio"
-                    rows="3"
-                    value={bio}
-                    onChange={(e) => setBio(e.target.value)}
-                  ></textarea>
-                </div>
-              </Modal.Body>
-              <Modal.Footer>
-                <Button variant="secondary" onClick={handleClose}>
-                  Close
-                </Button>
-                <Button variant="primary" onClick={handleUpdateProfile}>
-                  Save Changes
-                </Button>
-              </Modal.Footer>
-              <Modal.Header closeButton>
-                <Modal.Title>Log Out</Modal.Title>
-              </Modal.Header>
-              <Modal.Body>Are you sure you want to Log Out?</Modal.Body>
-              <Modal.Footer>
-                <Button variant="secondary" onClick={handleClose}>
-                  Close
-                </Button>
-                <Button variant="primary" onClick={handleLogout}>
-                  Yes
-                </Button>
-              </Modal.Footer>
-            </Modal>
-          </>
+    return (
+      <div className="container">
+        <div className="col-md-12 text-center">
+         <h1>{user.username}</h1>
+          <div className="col-md-12 text-center">
+            <>
+              <Button className="me-2" onClick={handleShow}>
+                Edit Profile
+              </Button>
+              <Button onClick={handleLogout}>
+                Log Out
+              </Button>
+              <Modal
+                show={show}
+                onHide={handleClose}
+                backdrop="static"
+                keyboard={false}
+              >
+                <Modal.Header closeButton>
+                  <Modal.Title>Edit Profile</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                  <div className="mb-3">
+                    <label htmlFor="username" className="form-label">Username</label>
+                    <input
+                      type="text"
+                      className="form-control"
+                      id="username"
+                      value={username} readOnly
+                      onChange={(e) => setUsername(e.target.value)}
+                    />
+                  </div>
+                  <div className="mb-3">
+                    <label htmlFor="bio" className="form-label">Bio</label>
+                    <textarea
+                      className="form-control"
+                      id="bio"
+                      rows="3"
+                      value={bio}
+                      onChange={(e) => setBio(e.target.value)}
+                    ></textarea>
+                  </div>
+                </Modal.Body>
+                <Modal.Footer>
+                  <Button variant="secondary" onClick={handleClose}>
+                    Close
+                  </Button>
+                  <Button variant="primary" onClick={handleUpdateProfile}>
+                    Save Changes
+                  </Button>
+                </Modal.Footer>
+              </Modal>
+            </>
+          </div>
         </div>
       </div>
-    </div>
-  );
-};
+    );
+  };
 
 export default PrivateUserProfile;
