@@ -26,7 +26,7 @@ const newUserSchema = new mongoose.Schema(
       required: false,
       type: String,
       default: ''
-    }
+    },
     profileImage: {
       type: String,
       label: "profileImage",
