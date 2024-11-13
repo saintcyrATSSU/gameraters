@@ -37,6 +37,7 @@ const App = () => {
           <Route path="/privateUserProfile" element={<PrivateUserProfile />} />
           <Route path="/showGameDetails" element={<ShowGameDetails />} />
           <Route path="/notificationsPage" element={<NotificationsPage />} />
+          <Route path="/game" element={<game />} />
         </Routes>
       </UserContext.Provider>
     </>

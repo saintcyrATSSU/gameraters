@@ -2,18 +2,20 @@ import React, { useState } from "react";
 
 function ShowGameDetails() {
   const [gameId, setGameId] = useState('');
+  const [gameName, setGameName] = useState('');
   const [gameDetails, setGameDetails] = useState(null);
   const [error, setError] = useState('');
   const [games, setGames] = useState('');
   const [name, setName] = useState('');
+  const [searchResults, setSearchResults] = useState(null);
 
-  const fetchGameDetails = async (e) => {
+  const fetchGameDetailsById = async (e) => {
     e.preventDefault();
     setError('');
     setGameDetails(null);
 
     try {
-      const response = await fetch(`http://localhost:8081/games/game/${games}`);
+      const response = await fetch(`http://localhost:8081/api/game/${gameId}`);
       if (!response.ok) {
         throw new Error('Game not found');
       }
@@ -24,17 +26,67 @@ function ShowGameDetails() {
     }
   };
 
+  // Search games by name
+  const searchGamesByName = async (e) => {
+    e.preventDefault();
+    setError('');
+    setSearchResults(null);
+
+    try {
+      console.log(`Searching for game: ${gameName}`);
+      const response = await fetch(`http://localhost:8081/api/game/${gameName}`);
+      console.log(response.ok, response.status)
+      if (!response.ok) {
+        const errorData = await response.json(); // error message from backend
+        throw new Error(errorData.error || 'No games found'); // Show backend error message if available
+      }
+      
+      const data = await response.json();
+      console.log(data);
+      setSearchResults(data);
+    
+    } catch (err) {
+      console.error('Frontend error:', err.message);
+      setError(err.message);
+    }
+  };
+
   return (
     <div>
-      <h1>Show Game Details</h1>
-      <form onSubmit={fetchGameDetails}>
+      <h1>Search for a Game</h1>
+      <form onSubmit={searchGamesByName}>
         <input
           type="text"
-          value={games}
-          onChange={(e) => setGames(e.target.value)}
-          placeholder="Enter Game"
+          value={gameName}
+          onChange={(e) => setGameName(e.target.value)}
+          placeholder="Enter Game Name"
         />
         <button type="submit">Search</button>
+      </form>
+
+      {searchResults && (
+        <div>
+          <h2>Search Results</h2>
+          {searchResults.map((game, index) => (
+            <div key={index} className="card">
+              <p><strong>Name:</strong> {game.name}</p>
+              <p><strong>Cover:</strong> <img src={game.img} alt={game.name} /></p>
+              <p><strong>Additional Cover:</strong> <img src={game.small_cap} alt={game.name} /></p>
+              {/* Display additional fields as needed */}
+            </div>
+          ))}
+        </div>
+      )}
+
+      <h1>Fetch Game Details by ID</h1>
+      <form onSubmit={fetchGameDetailsById}>
+        <input
+          type="text"
+          value={gameId}
+          onChange={(e) => setGameId(e.target.value)}
+          placeholder="Enter Game ID"
+        />
+        <button type="submit">Get Details</button>
       </form>
 
       {error && <p style={{ color: 'red' }}>{error}</p>}
@@ -43,10 +95,10 @@ function ShowGameDetails() {
         <div>
           <h2>Game Details</h2>
           <div className="card">
-          <p><strong>Name:</strong> {gameDetails.name}</p>
-          <p><strong>Description:</strong> {gameDetails.desc}</p>
-          <p><strong>Release Date:</strong> {gameDetails.release_date}</p>
-          <p><strong>Publisher:</strong> {gameDetails.publisher}</p>
+            <p><strong>Name:</strong> {gameDetails.name}</p>
+            <p><strong>Description:</strong> {gameDetails.desc}</p>
+            <p><strong>Release Date:</strong> {gameDetails.release_date}</p>
+            {/* Display additional details as needed */}
           </div>
         </div>
       )}

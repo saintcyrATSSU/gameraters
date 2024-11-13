@@ -32,6 +32,7 @@ app.use('/comments', commentRoutes)
 //app.use('/routes/', NotificationRoutes)
 app.use('/user', getProfileImage)
 app.use('/api/reviews', reviewRoutes);
+app.use("/api", gameDetails);
 
 app.listen(SERVER_PORT, (req, res) => {
     console.log(`The backend service is running on port ${SERVER_PORT} and waiting for requests.`);

@@ -4,52 +4,48 @@ require('dotenv').config();
 const axios = require("axios");
 
 const GAME_API_BASE_URL = 'https://games-details.p.rapidapi.com';
-router.get('/game/name', async (req, res) => {
-    const gameName = req.params;
+router.get('/game/:name', async (req, res) => {
+    const gameName = req.params.name;
     const apiKey = process.env.GAME_API_KEY;
-    const apiUrl = `https://games-details.p.rapidapi.com/games/${gameName}`;
+    let apiUrl = `https://games-details.p.rapidapi.com/search`;
+
+    console.log("Received game name:", gameName);
+
+    if (!gameName) {
+        return res.status(400).json({ error: 'Game name is required' });
+    }
 
     try {
+        apiUrl = `${apiUrl}?sugg=${encodeURIComponent(gameName)}`;
+        console.log("Updated API URL:", apiUrl);
         const response = await axios.get(apiUrl, {
             headers: {
                 'x-rapidapi-key': '417d64baecmsh79798f9984757ebp1fd1f6jsn82142ba39f42',
                 'x-rapidapi-host': 'games-details.p.rapidapi.com'
-            }
+            },
+            params: { sugg: gameName } // Pass gameName in the sugg parameter
         });
-        res.json(response.data); // Return all games
+
+        console.log("RapidAPI response data:", response.data);
+
+        // Handle both array and single object response structures
+        if (response.data) {
+            if (Array.isArray(response.data)) {
+                // If it's an array of games, send it directly
+                res.json(response.data);
+            } else if (response.data.name) {
+                // If it's a single game object, wrap it in an array
+                res.json([response.data]);
+            } else {
+                res.status(404).json({ error: 'No games found' });
+            }
+        } else {
+            res.status(404).json({ error: 'No games found' });
+        }
     } catch (error) {
-        res.status(500).send(error.message);
+        console.error('Error fetching game list:', error.message);
+        res.status(500).json({ error: 'Failed to fetch game list' });
     }
 });
-// Route to fetch game details by ID
-router.get('/game/:id', async (req, res) => {
-    const gameId = req.params.id;
-    const apiKey = process.env.GAME_API_KEY; // Assuming you store your API key in .env
-    const apiUrl = `https://games-details.p.rapidapi.com/single_game/${gameId}`; // Define the API URL with the gameId
-
-    try {
-        const response = await axios.get(apiUrl, {
-            headers: {
-                'x-rapidapi-key': '417d64baecmsh79798f9984757ebp1fd1f6jsn82142ba39f42', // Use the environment variable for the API key
-                'x-rapidapi-host': 'games-details.p.rapidapi.com' // Correct RapidAPI host
-            }
-        });
-
-        const gameData = response.data;
-
-        
-        // Return the game details in JSON format
-        res.json(gameData);
-    } catch (error) {
-        console.error('Error fetching game details:', error);
-
-        // Handle errors (e.g., game not found, API issues)
-        if (error.response && error.response.status === 404) {
-            res.status(404).json({ error: 'Game not found' });
-        } else {
-            res.status(500).json({ error: 'Failed to fetch game details' });
-        }
-    }
-})
 
 module.exports = router;
