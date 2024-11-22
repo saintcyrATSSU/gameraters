@@ -4,6 +4,8 @@ require('dotenv').config();
 const axios = require("axios");
 
 const GAME_API_BASE_URL = 'https://games-details.p.rapidapi.com';
+
+
 router.get('/game/:name', async (req, res) => {
     const gameName = req.params.name;
     const apiKey = process.env.GAME_API_KEY;
@@ -47,5 +49,6 @@ router.get('/game/:name', async (req, res) => {
         res.status(500).json({ error: 'Failed to fetch game list' });
     }
 });
+
 
 module.exports = router;

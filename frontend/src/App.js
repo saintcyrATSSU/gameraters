@@ -12,6 +12,7 @@ import Signup from "./components/pages/registerPage";
 import ShowGameDetails from "./components/pages/showGameDetails";
 import NotificationsPage from "./components/pages/notificationsPage"
 import PrivateUserProfile from "./components/pages/privateUserProfilePage";
+import GamePage from './components/pages/gamePage';
 import { createContext, useState, useEffect } from "react";
 import getUserInfo from "./utilities/decodeJwt";
 
@@ -38,6 +39,7 @@ const App = () => {
           <Route path="/showGameDetails" element={<ShowGameDetails />} />
           <Route path="/notificationsPage" element={<NotificationsPage />} />
           <Route path="/game" element={<game />} />
+          <Route path="/gamePage/:gameId" element={<GamePage />} />
         </Routes>
       </UserContext.Provider>
     </>

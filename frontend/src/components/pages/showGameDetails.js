@@ -15,7 +15,7 @@ function ShowGameDetails() {
     setGameDetails(null);
 
     try {
-      const response = await fetch(`http://localhost:8081/api/game/${gameId}`);
+      const response = await fetch(`http://localhost:8081/games/game/${gameId}`);
       if (!response.ok) {
         throw new Error('Game not found');
       }
@@ -52,7 +52,8 @@ function ShowGameDetails() {
   };
 
   return (
-    <div>
+    <div className="center-container">
+      <div className="search-bar">
       <h1>Search for a Game</h1>
       <form onSubmit={searchGamesByName}>
         <input
@@ -63,16 +64,19 @@ function ShowGameDetails() {
         />
         <button type="submit">Search</button>
       </form>
+   </div>
 
       {searchResults && (
-        <div>
+        <div className="center-container">
           <h2>Search Results</h2>
           {searchResults.map((game, index) => (
             <div key={index} className="card">
+              <a href={`gamePage/${game.id}`}>
               <p><strong>Name:</strong> {game.name}</p>
               <p><strong>Cover:</strong> <img src={game.img} alt={game.name} /></p>
               <p><strong>Additional Cover:</strong> <img src={game.small_cap} alt={game.name} /></p>
               {/* Display additional fields as needed */}
+            </a>
             </div>
           ))}
         </div>

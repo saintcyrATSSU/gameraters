@@ -53,7 +53,8 @@ Content-Type: application/json
 POST  http://localhost:8081/user/deleteAll
 
 ###
-GET http://localhost:8081/games/game/550
+GET http://localhost:8081/games/game/1778820
+Content-Type: application/json
 
 ###
 GET http://localhost:8081/games/game/CS2D
