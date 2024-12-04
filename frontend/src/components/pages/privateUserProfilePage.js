@@ -17,6 +17,7 @@ const PrivateUserProfile = () => {
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
   const navigate = useNavigate();
+  const [profileImage, setProfileImage] = useState('');
 
   const fetchUserProfile = async () => {
     const userInfo = getUserInfo();
@@ -29,6 +30,7 @@ const PrivateUserProfile = () => {
       const userData = await response.json();
       setUsername(userData.username);
       setBio(userData.bio);
+      setProfileImage(userData.profileImage);
     } catch (error) {
       console.error('Error fetching user profile:', error);
     }
@@ -74,6 +76,14 @@ const PrivateUserProfile = () => {
     return (
       <div className="container">
         <div className="col-md-12 text-center">
+          {/* Profile Image */}
+        <div className="profile-image-container">
+          <img
+            src={profileImage || "/frontend/src/components/images/360_F_498045890_KdYplJs6N6YfGNu0qr9MYwY4jVj4rd5M.jpg"} // Use a default image if profileImage is unavailable
+            alt={`${user.username}'s profile`}
+            className="profile-image"
+          />
+        </div>
          <h1>{user.username}</h1>
           <div className="col-md-12 text-center">
             <>
@@ -104,7 +114,7 @@ const PrivateUserProfile = () => {
                     />
                   </div>
                   <div className="mb-3">
-                    <label htmlFor="bio" className="form-label">Bio</label>
+                    <label htmlFor="bio" className="form-label">Biography</label>
                     <textarea
                       className="form-control"
                       id="bio"

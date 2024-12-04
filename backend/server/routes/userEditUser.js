@@ -11,7 +11,7 @@ router.post('/editUser', async (req, res) =>
     const { bio } = req.body;
     const { username } = req.params;
     try {
-        const profileId = req.params.id;
+        const userId = req.params.id;
 
         // Find the profile by ID
         const user = await userModel.findOne(username);

@@ -81,31 +81,6 @@ function ShowGameDetails() {
           ))}
         </div>
       )}
-
-      <h1>Fetch Game Details by ID</h1>
-      <form onSubmit={fetchGameDetailsById}>
-        <input
-          type="text"
-          value={gameId}
-          onChange={(e) => setGameId(e.target.value)}
-          placeholder="Enter Game ID"
-        />
-        <button type="submit">Get Details</button>
-      </form>
-
-      {error && <p style={{ color: 'red' }}>{error}</p>}
-
-      {gameDetails && (
-        <div>
-          <h2>Game Details</h2>
-          <div className="card">
-            <p><strong>Name:</strong> {gameDetails.name}</p>
-            <p><strong>Description:</strong> {gameDetails.desc}</p>
-            <p><strong>Release Date:</strong> {gameDetails.release_date}</p>
-            {/* Display additional details as needed */}
-          </div>
-        </div>
-      )}
     </div>
   );
 }

@@ -7,7 +7,7 @@ const Landingpage = () => {
         <Card style={{ width: '30rem' }} className="mx-2 my-2">
         <Card.Body>
           <Card.Title>Welcome to GameRaters</Card.Title>
-          <Card.Subtitle className="mb-2 text-muted">You can look up your favorite games and rate them here!</Card.Subtitle>
+          <Card.Subtitle className="mb-2 text-muted">You can look up your favorite games and rate them here! You can start by going to the Home Page</Card.Subtitle>
           <Card.Text>
           </Card.Text>
           <Card.Link href="/signup">Sign Up</Card.Link>

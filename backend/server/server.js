@@ -32,7 +32,7 @@ app.use('/games', gameDetails)
 app.use('/comments', commentRoutes)
 //app.use('/routes/', NotificationRoutes)
 app.use('/user', getProfileImage)
-app.use('/api/reviews', reviewRoutes);
+app.use('/reviews', reviewRoutes);
 app.use("/api", gameDetails);
 app.use('/games', gamedetailsbyId);
 

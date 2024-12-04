@@ -57,9 +57,27 @@ GET http://localhost:8081/games/game/1778820
 Content-Type: application/json
 
 ###
-GET http://localhost:8081/games/game/CS2D
+GET http://localhost:8081/games/game/Tekken
 Content-Type: application/json
 
 ###
 GET http://localhost:8081/api/game/Tekken
+Content-Type: application/json
+
+###
+GET http://localhost:8081/reviews/game/730
+Content-Type: application/json
+
+###
+POST http://localhost:8081/reviews
+Content-Type: application/json
+
+{
+  "gameId": "12345",
+  "rating": 5,
+  "review": "This game is fantastic!"
+}
+
+###
+GET http://localhost:8081/reviews/740130
 Content-Type: application/json
