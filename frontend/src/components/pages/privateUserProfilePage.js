@@ -85,7 +85,7 @@ const PrivateUserProfile = () => {
 
   const fetchReviewsByUsername = async () => {
     try {
-      const response = await axios.get(`http://localhost:8081/reviews/user/${username}`);
+      const response = await axios.get(`${process.env.REACT_APP_BACKEND_SERVER_URI}/reviews/user/${username}`);
       const sortedReviews = response.data.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
       setReviews(sortedReviews);
     } catch (err) {

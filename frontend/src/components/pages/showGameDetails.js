@@ -34,7 +34,7 @@ function ShowGameDetails() {
 
     try {
       console.log(`Searching for game: ${gameName}`);
-      const response = await fetch(`http://localhost:8081/api/game/${gameName}`);
+      const response = await fetch(`${process.env.REACT_APP_BACKEND_SERVER_URI}/api/game/${gameName}`);
       console.log(response.ok, response.status)
       if (!response.ok) {
         const errorData = await response.json(); // error message from backend

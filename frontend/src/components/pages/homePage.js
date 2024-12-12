@@ -22,7 +22,7 @@ const HomePage = () => {
 
     const fetchReviews = async () => {
         try {
-            const response = await axios.get('http://localhost:8081/reviews/getAll');
+            const response = await axios.get(`${process.env.REACT_APP_BACKEND_SERVER_URI}/reviews/getAll`);
             const sortedReviews = response.data.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt)); // Adjust API path if needed
             setReviews(sortedReviews);
         } catch (error) {

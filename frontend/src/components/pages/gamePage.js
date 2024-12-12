@@ -24,7 +24,7 @@ function GamePage() {
  
   const fetchReviewsByGameId = async () => {
     try {
-      const response = await fetch(`http://localhost:8081/reviews/reviews/${gameId}`);
+      const response = await fetch(`${process.env.REACT_APP_BACKEND_SERVER_URI}/reviews/reviews/${gameId}`);
       if (!response.ok) throw new Error('Failed to fetch reviews');
       const data = await response.json();
       const sortedReviews = data.reviews.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
@@ -40,7 +40,7 @@ console.log("Fetching game details for ID:", gameId);
     const fetchGameDetailsById = async () => {
       setLoading(true);
       try {
-        const response = await fetch(`http://localhost:8081/reviews/game/${gameId}`);
+        const response = await fetch(`${process.env.REACT_APP_BACKEND_SERVER_URI}/reviews/game/${gameId}`);
         
         if (!response.ok) 
           throw new Error('Game not found');
@@ -81,7 +81,7 @@ console.log("Fetching game details for ID:", gameId);
     };
 
     try {
-      const response = await fetch('http://localhost:8081/reviews', {
+      const response = await fetch(`${process.env.REACT_APP_BACKEND_SERVER_URI}/reviews`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(reviewData),
