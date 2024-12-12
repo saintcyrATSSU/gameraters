@@ -30,9 +30,11 @@ const HomePage = () => {
         }
     };
 
-
+ 
     if (!user) return (
-        <div><h4>Log in to view this page.</h4></div>
+        <div className='center-container'>
+            <h4><Link to="/login">Log in</Link> to view this page.</h4>
+        </div>
     );
 
     const { id, email, username } = user;
