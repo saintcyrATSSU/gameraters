@@ -22,8 +22,9 @@ const HomePage = () => {
 
     const fetchReviews = async () => {
         try {
-            const response = await axios.get('http://localhost:8081/reviews/getAll'); // Adjust API path if needed
-            setReviews(response.data);
+            const response = await axios.get('http://localhost:8081/reviews/getAll');
+            const sortedReviews = response.data.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt)); // Adjust API path if needed
+            setReviews(sortedReviews);
         } catch (error) {
             console.error('Error fetching reviews:', error);
         }
@@ -59,7 +60,7 @@ const HomePage = () => {
                         {reviews.map((review) => (
                                 <div className="review-row" key={review._id}>
                                 <strong>Game:</strong> {review.gameName} <br />
-                                <p><strong>User:</strong> {review.username}</p>
+                                <p><strong>@</strong> {review.username}</p>
                                 <strong>Rating:</strong> {review.rating} <br />
                                 <strong>Review:</strong> {review.review} <br />
                                 <strong>Submitted At:</strong> {new Date(review.createdAt).toLocaleString()}
