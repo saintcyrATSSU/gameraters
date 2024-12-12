@@ -73,11 +73,22 @@ POST http://localhost:8081/reviews
 Content-Type: application/json
 
 {
-  "gameId": "12345",
+  "userId": "674fe303d38bc450e2ff6fe2",
+  "username": "MakenleyX3000",
+  "gameName": "Counter-Strike 2",
+  "gameId": "730",
   "rating": 5,
   "review": "This game is fantastic!"
 }
 
 ###
-GET http://localhost:8081/reviews/740130
+GET http://localhost:8081/reviews/reviews/1778820
+Content-Type: application/json
+
+###
+GET http://localhost:8081/reviews/user/MakenleyX3000
+Content-Type: application/json
+
+###
+GET http://localhost:8081/reviews/getAll
 Content-Type: application/json

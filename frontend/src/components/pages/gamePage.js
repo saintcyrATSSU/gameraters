@@ -12,6 +12,8 @@ function GamePage() {
   const [rating, setRating] = useState(0);
   const [reviewText, setReviewText] = useState('');
   const [show, setShow] = useState(false);
+  const [reviews, setReviews] = useState([]);
+  const [newReview, setNewReview] = useState({ rating: 0, review: '' });
   const handleShow = () => setShow(true);
   const handleClose = () => setShow(false);
   const handleStarClick = (star) => {
@@ -20,8 +22,20 @@ function GamePage() {
   
 
  
-  useEffect(() => {
-    console.log("Fetching game details for ID:", gameId);
+  const fetchReviewsByGameId = async () => {
+    try {
+      const response = await fetch(`http://localhost:8081/reviews/reviews/${gameId}`);
+      if (!response.ok) throw new Error('Failed to fetch reviews');
+      const data = await response.json();
+      const sortedReviews = data.reviews.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+      setReviews(sortedReviews);
+    } catch (error) {
+      console.error('Error fetching reviews:', error);
+      setError('Failed to fetch reviews.');
+    }
+  };
+    
+console.log("Fetching game details for ID:", gameId);
     
     const fetchGameDetailsById = async () => {
       setLoading(true);
@@ -42,7 +56,9 @@ function GamePage() {
       }
     };
 
+  useEffect(() => {
     fetchGameDetailsById();
+    fetchReviewsByGameId();
   }, [gameId]);
 
   const handleSubmitReview = async () => {
@@ -55,7 +71,14 @@ function GamePage() {
       return;
     }
 
-    const reviewData = { gameId, rating, review: reviewText };
+    const reviewData = { 
+      userId: '674fe303d38bc450e2ff6fe2',
+      username: 'MakenleyX3000' ,
+      gameName: gameDetails.name,
+      gameId, 
+      rating, 
+      review: reviewText 
+    };
 
     try {
       const response = await fetch('http://localhost:8081/reviews', {
@@ -65,37 +88,51 @@ function GamePage() {
       });
 
       if (!response.ok) throw new Error('Failed to submit review');
-
-      alert('Review submitted successfully!');
-      setShowModal(false);
+      const savedReview = await response.json();
+      setReviews((prevReviews) => [...prevReviews, savedReview.review]); // Add new review to the list
+      setNewReview({ rating: 0, review: '' });
       setRating(0);
       setReviewText('');
-    } catch (error) {
-      console.error('Error submitting review:', error);
-      alert('Failed to submit review. Please try again.');
+      fetchReviewsByGameId();
+
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setLoading(false);
+      handleClose();
     }
   };
+
+  
 
   if (!gameDetails) return <p>Loading...</p>;
   if (error) return <p>{error}</p>;
 
 
   return (
-    <div>
+    <div
+    style={{ 
+      backgroundImage: 'url(frontend/src/components/images/depositphotos_562901082-stock-photo-rendering-illustration-gaming-background-abstract.jpg)', // Replace with your image path
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+        minHeight: '100vh',
+        padding: '20px',
+    }}
+    >
       <h1>{gameDetails.name}</h1>
       <div className="card">
       <p><strong>Description:</strong> {gameDetails.desc}</p>
       <p><strong>Release Date:</strong> {gameDetails.release_date}</p>
       <p><strong>Genre:</strong> {gameDetails.tags && gameDetails.tags.slice(0, 3).join(", ")}</p>
+      <p><strong>Developer:</strong> {gameDetails.dev_details.developer_name && gameDetails.dev_details.developer_name.join(", ")}</p>
       <p><strong>Publisher:</strong> {gameDetails.dev_details.publisher && gameDetails.dev_details.publisher.join(", ")}</p>
       </div>
-      <Button className="me-2" onClick={handleShow}>
-        Make a Review
-      </Button>
       
       
-        <div className="card">
-      <h3>Screenshots</h3>
+      <div className="card">
+      <div className="center-container">
+      <h3>Screenshots & Videos</h3>
+      </div>
       <div style={{ display: 'flex', flexWrap: 'nowrap', gap: '10px', overflowX: 'auto' }}>
       {gameDetails.images.screenshot &&
         gameDetails.images.screenshot.map((screenshot, index) => (
@@ -109,9 +146,45 @@ function GamePage() {
       </a>
       ))}
       </div>
+      <div style={{ display: 'flex', flexWrap: 'nowrap', gap: '10px', overflowX: 'auto' }}>
+    {gameDetails.images.videos &&
+      gameDetails.images.videos.map((video, index) => (
+        <video
+          key={index}
+          src={video}
+          controls
+          style={{ width: '300px', height: 'auto', borderRadius: '5px' }}
+        >
+          Your browser does not support the video tag.
+        </video>
+      ))}
   </div>
-
+  </div>
+      <Button className="me-2" onClick={handleShow}>
+        Make a Review
+      </Button>
       {/* Add more details as needed */}
+
+      <div className="reviews-section">
+        <div className='center-container'>
+  <h3>Reviews</h3>
+  {reviews.length === 0 ? (
+    <p>No reviews yet. Be the first to review this game!</p>
+  ) : (
+    <ul>
+      {reviews.map((review, index) => (
+        <li key={index} className='card'>
+          <p><strong>User:</strong> {review.username}</p>
+          <p><strong>Rating:</strong> {review.rating} / 5</p>
+          <p><strong>Review:</strong> {review.review}</p>
+          <p><strong>Date:</strong> {new Date(review.createdAt).toLocaleDateString()}</p>
+        </li>
+      ))}
+    </ul>
+  )}
+  </div>
+</div>
+      
       
 
       <Modal show={show} onHide={handleClose} backdrop="static" keyboard={false}>

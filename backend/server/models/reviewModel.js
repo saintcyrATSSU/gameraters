@@ -1,13 +1,21 @@
 const mongoose = require('mongoose');
 
 const reviewSchema = new mongoose.Schema({
+    username: {
+        type: String,
+        required: true,
+      },
+    gameName: {
+        type: String,
+        required: true
+    },
     gameId: {
         type: String,
         required: true
     },
     userId: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'User', // assuming you have a User model
+        ref: 'users', // assuming you have a User model
         required: true
     },
     rating: {
@@ -16,7 +24,7 @@ const reviewSchema = new mongoose.Schema({
         min: 1,
         max: 5
     },
-    reviewText: {
+    review: {
         type: String,
         required: true
     },

@@ -14,6 +14,7 @@ import PrivateUserProfile from "./components/pages/privateUserProfilePage";
 import GamePage from './components/pages/gamePage';
 import { createContext, useState, useEffect } from "react";
 import getUserInfo from "./utilities/decodeJwt";
+import ProtectedRoute from "./components/ProtectedRoute";
 
 export const UserContext = createContext();
 //test change
@@ -34,10 +35,13 @@ const App = () => {
           <Route exact path="/home" element={<HomePage />} />
           <Route exact path="/login" element={<Login />} />
           <Route exact path="/signup" element={<Signup />} />
+          <Route exact path="/showGameDetails" element={<ShowGameDetails />} />
+          <Route exact path="/gamePage/:gameId" element={<GamePage />} />
+          <Route element={<ProtectedRoute />}>
           <Route path="/privateUserProfile" element={<PrivateUserProfile />} />
-          <Route path="/showGameDetails" element={<ShowGameDetails />} />
           <Route path="/game" element={<game />} />
-          <Route path="/gamePage/:gameId" element={<GamePage />} />
+          
+          </Route>
         </Routes>
       </UserContext.Provider>
     </>

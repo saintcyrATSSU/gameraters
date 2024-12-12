@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import getUserInfo from '../../utilities/decodeJwt';
 import axios from 'axios';
 import ProfileImage from "../images/ProfileImage.js";
 
 const HomePage = () => {
     const [user, setUser] = useState({});
-    const [featuredReviews, setFeaturedReviews] = useState([]);
+    const [reviews, setReviews] = useState([]);
     const navigate = useNavigate();
 
     const handleClick = (e) => {
@@ -17,33 +17,17 @@ const HomePage = () => {
 
     useEffect(() => {
         setUser(getUserInfo());
+        fetchReviews();
     }, []);
 
-    const fetchFeaturedReviews = async () => {
-        const options = {
-            method: 'GET',
-            url: 'https://games-details.p.rapidapi.com/games',
-            headers: {
-                'X-RapidAPI-Key': '417d64baecmsh79798f9984757ebp1fd1f6jsn82142ba39f42',  // Replace with your actual RapidAPI key
-                'X-RapidAPI-Host': 'games-details.p.rapidapi.com'
-            }
-        };
-
+    const fetchReviews = async () => {
         try {
-            const response = await axios.request(options);
-            const data = response.data; // Assuming the API response is an array of games
-            const reviews = data.map(game => ({
-                name: game.id,
-                desc: game.title,
-                rating: game.rating // Assuming API provides a rating
-            }));
-            setFeaturedReviews(reviews);
+            const response = await axios.get('http://localhost:8081/reviews/getAll'); // Adjust API path if needed
+            setReviews(response.data);
         } catch (error) {
-            console.error('Error fetching game reviews:', error);
+            console.error('Error fetching reviews:', error);
         }
     };
-
-    fetchFeaturedReviews(); // Call the API when the component mounts
 
 
     if (!user) return (
@@ -61,14 +45,37 @@ const HomePage = () => {
                 </div>
                 <div className="card">
                     <p>You can find a game you like and you can rate them here 
-                        at GameRaters
+                        at GameRaters. <Link to={`/showGameDetails`}>Click Here to Start Searching</Link>
                     </p>
                 </div>
             </div>
+
+            {/* Display the reviews */}
+            <div className="center-container">
+            <div className="reviews-container">
+                <h3>All Reviews</h3>
+                {reviews.length > 0 ? (
+                    <ul>
+                        {reviews.map((review) => (
+                                <div className="review-row" key={review._id}>
+                                <strong>Game:</strong> {review.gameName} <br />
+                                <p><strong>User:</strong> {review.username}</p>
+                                <strong>Rating:</strong> {review.rating} <br />
+                                <strong>Review:</strong> {review.review} <br />
+                                <strong>Submitted At:</strong> {new Date(review.createdAt).toLocaleString()}
+                                </div>
+                           
+                        ))}
+                    </ul>
+                ) : (
+                    <p>No reviews available.</p>
+                )}
+            </div>
+            </div>
         </>
-    
     );
-    };
+    
+};
     
 
 

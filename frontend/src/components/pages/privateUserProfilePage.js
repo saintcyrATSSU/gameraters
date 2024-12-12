@@ -4,6 +4,7 @@ import Modal from "react-bootstrap/Modal";
 import { useNavigate } from "react-router-dom";
 import getUserInfo from "../../utilities/decodeJwt";
 import ProfileImage from "../images/ProfileImage.js";
+import axios from 'axios';
 
 
 //link to service
@@ -18,6 +19,9 @@ const PrivateUserProfile = () => {
   const handleShow = () => setShow(true);
   const navigate = useNavigate();
   const [profileImage, setProfileImage] = useState('');
+  const [reviews, setReviews] = useState([]);
+  const [error, setError] = useState(null);
+  const [loading, setLoading] = useState(true);
 
   const fetchUserProfile = async () => {
     const userInfo = getUserInfo();
@@ -30,16 +34,30 @@ const PrivateUserProfile = () => {
       const userData = await response.json();
       setUsername(userData.username);
       setBio(userData.bio);
-      setProfileImage(userData.profileImage);
+      setProfileImage(`${process.env.REACT_APP_BACKEND_SERVER_URI}${userData.profileImage}`);
     } catch (error) {
       console.error('Error fetching user profile:', error);
     }
   };
 
+  const handleImageChange = (e) => {
+    if (e.target.files && e.target.files[0]) {
+      const file = e.target.files[0];
+      setProfileImage(URL.createObjectURL(file));
+    }
+  };
+
   const handleUpdateProfile = async () => {
+    const formData = new FormData();
+    formData.append("username", username);
+    formData.append("bio", bio);
+    if (profileImage instanceof File) {
+    formData.append("profileImage", profileImage);
+  }
     try {
       const response = await fetch(`${process.env.REACT_APP_BACKEND_SERVER_URI}/user/editUser`, {
         method: "POST",
+        body: formData,
         headers: {
           "Content-Type": "application/json"
         },
@@ -62,12 +80,28 @@ const PrivateUserProfile = () => {
   // handle logout button
   const handleLogout = (async) => {
     localStorage.clear();
-    navigate("/");
+    navigate("/login");
   };
+
+  const fetchReviewsByUsername = async () => {
+    try {
+      const response = await axios.get(`http://localhost:8081/reviews/user/${username}`);
+      const sortedReviews = response.data.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+      setReviews(sortedReviews);
+    } catch (err) {
+      console.error('Error fetching reviews by username:', err.message);
+      setError('Failed to fetch reviews.');
+    } finally {
+      setLoading(false);
+    }
+  };
+  
 
   useEffect(() => {
     setUser(getUserInfo())
-  }, []);
+    fetchUserProfile();
+    fetchReviewsByUsername();
+  }, [username]);
 
 
   // 	<span><b>{<FollowerCount username = {username}/>}</b></span>&nbsp;
@@ -79,7 +113,7 @@ const PrivateUserProfile = () => {
           {/* Profile Image */}
         <div className="profile-image-container">
           <img
-            src={profileImage || "/frontend/src/components/images/360_F_498045890_KdYplJs6N6YfGNu0qr9MYwY4jVj4rd5M.jpg"} // Use a default image if profileImage is unavailable
+            src={profileImage || "/ProfileIcon.png"} // Use a default image if profileImage is unavailable
             alt={`${user.username}'s profile`}
             className="profile-image"
           />
@@ -93,6 +127,26 @@ const PrivateUserProfile = () => {
               <Button onClick={handleLogout}>
                 Log Out
               </Button>
+              
+              <div className="profile-container">
+              <h2>Your Reviews</h2>
+              {loading && <p>Loading...</p>}
+              
+              {reviews.length === 0 ? (
+              <p>No reviews submitted yet.</p>
+            ) : (
+           <ul>
+          {reviews.map((review) => (
+            <li key={review._id} className="review-item">
+              <strong>Game:</strong> {review.gameName} <br />
+              <strong>Rating:</strong> {review.rating} <br />
+              <strong>Review:</strong> {review.review} <br />
+              <strong>Date:</strong> {new Date(review.createdAt).toLocaleDateString()}
+            </li>
+          ))}
+        </ul>
+      )}
+      </div>
               <Modal
                 show={show}
                 onHide={handleClose}
@@ -122,6 +176,17 @@ const PrivateUserProfile = () => {
                       value={bio}
                       onChange={(e) => setBio(e.target.value)}
                     ></textarea>
+                    <div className="mb-3">
+                    <label htmlFor="profileImage" className="form-label">Profile Image</label>
+                    <input
+                    type="file"
+                    className="form-control"
+                    id="profileImage"
+                    accept="image/*"
+                    style={{ display: "none" }}
+                    onChange={(e) => handleImageChange(e)}
+                    />
+                </div>
                   </div>
                 </Modal.Body>
                 <Modal.Footer>
@@ -133,6 +198,7 @@ const PrivateUserProfile = () => {
                   </Button>
                 </Modal.Footer>
               </Modal>
+              
             </>
           </div>
         </div>
